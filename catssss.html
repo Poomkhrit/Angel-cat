@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touch to Switch Cat</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+        #cat1, #cat2 {
+            width: 500px;
+            height: 500px;
+            display: none; /* Hide the images initially */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <img id="cat1" src="cat1.png" alt="Cat 1">
+    <img id="cat2" src="cat2.png" alt="Cat 2">
+    
+    <script>
+        // Get the canvas element and its context
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Define colors
+        var WHITE = "#FFFFFF";
+        var BLACK = "#000000";
+
+        // Get cat images
+        var cat1 = document.getElementById("cat1");
+        var cat2 = document.getElementById("cat2");
+
+        var currentCat = cat1; // Initially show cat1
+
+        // Main game loop
+        function gameLoop() {
+            // Clear the canvas
+            ctx.fillStyle = WHITE;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the current cat image at position (100, 100) with size 500x500
+            ctx.drawImage(currentCat, 100, 100, 500, 500);
+        }
+
+        // Handle touch events
+        function handleTouch(event) {
+            event.preventDefault(); // Prevent default touch behavior (like scrolling)
+            var rect = canvas.getBoundingClientRect();
+            var touchX = event.touches[0].clientX - rect.left;
+            var touchY = event.touches[0].clientY - rect.top;
+
+            // Check if the touch is within the bounds of the cat image
+            if (touchX >= 100 && touchX <= 600 &&
+                touchY >= 100 && touchY <= 600) {
+                // Switch between cat1 and cat2
+                currentCat = (currentCat === cat1) ? cat2 : cat1;
+            }
+        }
+
+        canvas.addEventListener("touchstart", handleTouch);
+        
+        // Start the game loop
+        setInterval(gameLoop, 1000 / 60); // Run at approximately 60 frames per second
+    </script>
+</body>
+</html>
